@@ -74,7 +74,6 @@ onMounted(async () => {
 
     question.value = res
 
-    console.log('DETAIL:', question.value)
   } catch (err) {
     console.error('Load detail error:', err)
   } finally {

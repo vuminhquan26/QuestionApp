@@ -130,20 +130,20 @@ onMounted(async () => {
   // SUBJECT
   const resSubject = await fetch('http://127.0.0.1:8000/api/subject')
   const dataSubject = await resSubject.json()
-  subject.value = dataSubject.data || []
+  subject.value = dataSubject.data
 
   // QUESTION TYPE
   const resQuestionType = await fetch('http://127.0.0.1:8000/api/questiontype')
   const dataQuestionType = await resQuestionType.json()
-  question_type.value = dataQuestionType.data || []
+  question_type.value = dataQuestionType.data
 
   // ANSWER TYPE
   const resAnswerType = await fetch('http://127.0.0.1:8000/api/answertype')
   const dataAnswerType = await resAnswerType.json()
-  answer_type.value = dataAnswerType.data || []
+  answer_type.value = dataAnswerType.data
 })
 
-// ===== FILL DATA =====
+// FILL DATA
 watch(
   () => props.data,
   (val) => {
@@ -218,8 +218,6 @@ const submitForm = async () => {
   } else {
     res = await questionService.create(payload)
   }
-
-  console.log('API RESULT:', res)
 
   if (res && (res.id || res.success || res.data)) {
     message.success('Lưu thành công')
