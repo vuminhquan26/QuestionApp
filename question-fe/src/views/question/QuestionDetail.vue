@@ -51,7 +51,7 @@
     </a-card>
   </div>
 </template>
-<script setup lang="ts">
+<script setup >
 import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { questionService } from '@/services/question_service'

@@ -6,7 +6,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import QuestionForm from '@/components/forms/QuestionForm.vue'
 import { ref } from 'vue'
 

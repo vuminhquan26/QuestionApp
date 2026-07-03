@@ -88,7 +88,7 @@
     </a-form-item>
   </a-form>
 </template>
-<script setup lang="ts">
+<script setup>
 import { ref, onMounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { message } from 'ant-design-vue'

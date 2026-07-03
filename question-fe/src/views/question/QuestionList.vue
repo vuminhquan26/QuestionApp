@@ -15,7 +15,7 @@
     </template>
   </a-table>
 </template>
-<script setup lang="ts">
+<script setup >
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { questionService } from '@/services/question_service'

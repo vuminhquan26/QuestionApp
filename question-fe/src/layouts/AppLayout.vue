@@ -55,7 +55,7 @@
   </a-layout>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import { ref, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { UserOutlined } from '@ant-design/icons-vue'
