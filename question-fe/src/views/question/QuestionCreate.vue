@@ -8,8 +8,7 @@
 
 <script setup>
 import QuestionForm from '@/components/forms/QuestionForm.vue'
-import { ref } from 'vue'
 
-const action = ref('create')
-const question = ref({ id: 1, title: 'abc' })
+const action = 'create'
+const question = null
 </script>

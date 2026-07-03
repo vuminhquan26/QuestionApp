@@ -2,7 +2,7 @@
   <a-layout>
     <!-- HEADER -->
     <a-layout-header class="header">
-      <div class="logo" />
+      <div class="logo"></div>
 
       <a-menu v-model:selectedKeys="selectedKeys" theme="dark" mode="horizontal" @click="onClick">
         <a-menu-item key="/dashboard"> Dashboard </a-menu-item>
@@ -63,13 +63,12 @@ import { UserOutlined } from '@ant-design/icons-vue'
 const router = useRouter()
 const route = useRoute()
 
-const selectedKeys = ref<string[]>([])
-
-const selectedKeys2 = ref<string[]>(['1'])
-const openKeys = ref<string[]>(['sub1'])
+const selectedKeys = ref([])
+const selectedKeys2 = ref(['1'])
+const openKeys = ref(['sub1'])
 
 // click menu
-const onClick = (e: any) => {
+const onClick = (e) => {
   router.push(e.key)
 }
 
@@ -81,6 +80,7 @@ watch(
   },
   { immediate: true },
 )
+
 console.log('HEADER MOUNT')
 </script>
 

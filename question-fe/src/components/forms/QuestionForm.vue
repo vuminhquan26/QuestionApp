@@ -162,15 +162,15 @@ watch(
 
     form.value.answers = { A: '', B: '', C: '', D: '' }
 
-    answers.forEach((item: any, index: number) => {
-      const key = ['A', 'B', 'C', 'D'][index]
-      if (key) form.value.answers[key] = item.answer_content
-    })
+  answers.forEach((item, index) => {
+    const key = ['A', 'B', 'C', 'D'][index]
+    if (key) form.value.answers[key] = item.answer_content
+  })
 
     if (val.answer_data?.correct_answer?.length) {
       const correct = val.answer_data.correct_answer[0]
 
-      const index = answers.findIndex((a: any) => a.answer_id === correct.answer_id)
+      const index = answers.findIndex((a) => a.answer_id === correct.answer_id)
 
       if (index !== -1) {
         form.value.correct = ['A', 'B', 'C', 'D'][index]
@@ -214,7 +214,7 @@ const submitForm = async () => {
   let res
 
   if (props.action === 'edit') {
-    res = await questionService.update(route.params.id as string, payload)
+    res = await questionService.update(route.params.id, payload)
   } else {
     res = await questionService.create(payload)
   }

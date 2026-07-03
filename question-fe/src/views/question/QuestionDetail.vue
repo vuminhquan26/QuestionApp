@@ -51,29 +51,28 @@
     </a-card>
   </div>
 </template>
-<script setup >
+<script setup>
 import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { questionService } from '@/services/question_service'
 
 const route = useRoute()
 
-const question = ref<any>(null)
+const question = ref(null)
 const loading = ref(true)
 
-const isCorrect = (id: string) => {
+const isCorrect = (id) => {
   const correctList = question.value?.answer_data?.correct_answer || []
-  return correctList.some((c: any) => c.answer_id === id)
+  return correctList.some((c) => c.answer_id === id)
 }
 
 onMounted(async () => {
   try {
-    const id = route.params.id as string
+    const id = String(route.params.id)
 
     const res = await questionService.getDetail(id)
 
-    question.value = res
-
+    question.value = res?.data ?? res
   } catch (err) {
     console.error('Load detail error:', err)
   } finally {

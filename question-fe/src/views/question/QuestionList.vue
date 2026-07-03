@@ -22,22 +22,22 @@ import { questionService } from '@/services/question_service'
 
 const router = useRouter()
 
-const goDetail = (id: string) => {
+const goDetail = (id) => {
   router.push(`/detail/${id}`)
 }
 
-const goEdit = (id: string) => {
+const goEdit = (id) => {
   router.push(`/edit/${id}`)
 }
 
-const handleDelete = async (id: string) => {
+const handleDelete = async (id) => {
   if (!confirm('Xoá thật không?')) return
 
   await questionService.remove(id)
   fetchQuestions()
 }
 
-const questions = ref<any[]>([])
+const questions = ref([])
 
 const pagination = ref({
   current: 1,
@@ -114,10 +114,10 @@ const fetchQuestions = async (page = 1) => {
   }
 }
 // CHANGE PAGE
-const handleTableChange = (pag: any) => {
+const handleTableChange = (pag) => {
   fetchQuestions(pag.current)
 }
-const formatDate = (dateStr: string) => {
+const formatDate = (dateStr) => {
   const date = new Date(dateStr)
 
   return date.toLocaleString('vi-VN', {

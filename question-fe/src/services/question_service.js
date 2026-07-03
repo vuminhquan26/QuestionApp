@@ -6,12 +6,12 @@ export const questionService = {
     return await res.json()
   },
 
-  async getDetail(id: string) {
+  async getDetail(id) {
     const res = await fetch(`${BASE_URL}/${id}`)
     return await res.json()
   },
 
-  async create(data: any) {
+  async create(data) {
     const res = await fetch(BASE_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -20,7 +20,7 @@ export const questionService = {
     return await res.json()
   },
 
-  async update(id: string, data: any) {
+  async update(id, data) {
     const res = await fetch(`${BASE_URL}/${id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
@@ -29,7 +29,7 @@ export const questionService = {
     return await res.json()
   },
 
-  async remove(id: string) {
+  async remove(id) {
     const res = await fetch(`${BASE_URL}/${id}`, {
       method: 'DELETE',
     })
