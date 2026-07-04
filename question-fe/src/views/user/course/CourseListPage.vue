@@ -11,26 +11,20 @@
     style="width: 300px"
   />
 
-  <a-select placeholder="Chọn level" style="width: 150px">
-    <a-select-option value="all">Tất cả</a-select-option>
-    <a-select-option value="beginner">Beginner</a-select-option>
-    <a-select-option value="intermediate">Intermediate</a-select-option>
-    <a-select-option value="advanced">Advanced</a-select-option>
-  </a-select>
+
 </div>
 
 <!-- COURSE GRID -->
 <a-row :gutter="[16,16]">
-  <a-col v-for="i in 8" :key="i" :xs="24" :sm="12" :md="8" :lg="6">
+  <a-col v-for="course in courses" :key="course.id" :xs="24" :sm="12" :md="8" :lg="6">
     <a-card hoverable class="course-card">
       <template #cover>
         <img src="@/assets/vue.png" />
       </template>
 
-      <a-card-meta title="Vue 3 từ cơ bản đến nâng cao">
+      <a-card-meta :title="course.course_name">
         <template #description>
-          <p>Level: Beginner</p>
-          <p>Giá: 199k</p>
+          {{ course.description }}
         </template>
       </a-card-meta>
     </a-card>
@@ -38,14 +32,28 @@
 </a-row>
 
 <!-- PAGINATION -->
-<div class="pagination">
+<!-- <div class="pagination">
   <a-pagination :total="50" :pageSize="8" />
-</div>
+</div> -->
 
   </div>
 </template>
 
 <script setup>
+import { ref, onMounted } from 'vue'
+const courses = ref([])
+const fetchCourses = async () => {
+  try {
+    const response = await fetch('http://127.0.0.1:8000/api/course')
+    const result = await response.json()
+    courses.value = result.data
+  } catch (error) {
+    console.error('Error fetch courses:', error)
+  }
+}
+onMounted(() => {
+  fetchCourses()
+})
 </script>
 
 <style scoped>

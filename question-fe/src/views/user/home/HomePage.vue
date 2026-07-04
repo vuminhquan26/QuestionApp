@@ -31,28 +31,16 @@
     <section>
       <h2>Campus</h2>
       <a-row :gutter="16">
-        <a-col :span="8">
+        <a-col v-for="campus in campus" :key="campus.id" :span="6">
           <a-card hoverable>
             <template #cover>
-              <!-- <img src="@/assets/frontend.png" /> -->
+              <img src="@/assets/campus.png" width="100%" height="100%" />
             </template>
-            <a-card-meta title="Frontend" description="Học lập trình Frontend" />
-          </a-card>
-        </a-col>
-        <a-col :span="8">
-          <a-card hoverable>
-            <template #cover>
-              <!-- <img src="@/assets/backend.png" /> -->
-            </template>
-            <a-card-meta title="Backend" description="Học lập trình Backend" />
-          </a-card>
-        </a-col>
-        <a-col :span="8">
-          <a-card hoverable>
-            <template #cover>
-              <!-- <img src="@/assets/mobile.png" /> -->
-            </template>
-            <a-card-meta title="Mobile" description="Học lập trình Mobile" />
+            <a-card-meta :title="campus.campus_desc">
+              <template #description>
+                {{ campus.description }}
+              </template>
+            </a-card-meta>
           </a-card>
         </a-col>
       </a-row>
@@ -103,9 +91,21 @@ const fetchCourses = async () => {
     console.error('Error fetch courses:', error)
   }
 }
+
+const campus = ref([])
+const fetchCampuses = async () => {
+  try {
+    const response = await fetch('http://127.0.0.1:8000/api/campus')
+    const result = await response.json()
+    campus.value = result.data
+  } catch (error) {
+    console.error('Error fetch campuses:', error)
+  }
+}
 onMounted(() => {
   fetchSubjects()
   fetchCourses()
+  fetchCampuses()
 })
 </script>
 <style scoped>
