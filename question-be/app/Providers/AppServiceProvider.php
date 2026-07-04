@@ -16,6 +16,8 @@ use App\Services\Implementations\AnswerTypeService;
 use App\Services\Interfaces\SubjectServiceInterface;
 use App\Services\Implementations\SubjectService;
 
+use App\Services\Interfaces\CourseServiceInterface;
+use App\Services\Implementations\CourseService;
 class AppServiceProvider extends ServiceProvider
 {
     public function register(): void
@@ -38,6 +40,11 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(
             SubjectServiceInterface::class,
             SubjectService::class
+        );
+
+        $this->app->bind(
+            CourseServiceInterface::class,
+            CourseService::class
         );
     }
 

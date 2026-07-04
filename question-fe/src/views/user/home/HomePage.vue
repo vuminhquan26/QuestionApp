@@ -10,16 +10,16 @@
 
     <!-- FEATURED -->
     <section>
-      <h2>Khóa học nổi bật</h2>
+      <h2>Khoá Học Nổi Bật </h2>
       <a-row :gutter="16">
-        <a-col v-for="i in 4" :key="i" :span="6">
+        <a-col v-for="course in courses" :key="course.id" :span="6">
           <a-card hoverable>
             <template #cover>
               <img src="@/assets/laravel-featured.png" />
             </template>
-            <a-card-meta title="Laravel API">
+            <a-card-meta :title="course.course_name">
               <template #description>
-                Backend - 150k
+                {{ course.description }}
               </template>
             </a-card-meta>
           </a-card>
@@ -29,24 +29,47 @@
 
     <!-- CATEGORY -->
     <section>
-      <h2>Danh mục</h2>
-      <a-tag color="blue">Frontend</a-tag>
-      <a-tag color="green">Backend</a-tag>
-      <a-tag color="orange">Mobile</a-tag>
+      <h2>Campus</h2>
+      <a-row :gutter="16">
+        <a-col :span="8">
+          <a-card hoverable>
+            <template #cover>
+              <!-- <img src="@/assets/frontend.png" /> -->
+            </template>
+            <a-card-meta title="Frontend" description="Học lập trình Frontend" />
+          </a-card>
+        </a-col>
+        <a-col :span="8">
+          <a-card hoverable>
+            <template #cover>
+              <!-- <img src="@/assets/backend.png" /> -->
+            </template>
+            <a-card-meta title="Backend" description="Học lập trình Backend" />
+          </a-card>
+        </a-col>
+        <a-col :span="8">
+          <a-card hoverable>
+            <template #cover>
+              <!-- <img src="@/assets/mobile.png" /> -->
+            </template>
+            <a-card-meta title="Mobile" description="Học lập trình Mobile" />
+          </a-card>
+        </a-col>
+      </a-row>
     </section>
 
     <!-- COURSE LIST -->
     <section>
-      <h2>Tất cả khóa học</h2>
+      <h2>Môn Học Nổi Bật</h2>
       <a-row :gutter="16">
-        <a-col v-for="i in 8" :key="i" :span="6">
+        <a-col v-for="subject in subjects" :key="subject.id" :span="6">
           <a-card hoverable>
             <template #cover>
-              <img src="@/assets/laravel-featured.png" />
+              <img src="@/assets/monhoc.png" width="100%" height="100%"   />
             </template>
-            <a-card-meta title="Laravel API">
+            <a-card-meta class="card-meta" :title="subject.name">
               <template #description>
-                Backend - 150k
+                {{ subject.description }}
               </template>
             </a-card-meta>
           </a-card>
@@ -55,6 +78,36 @@
     </section>
   </div>
 </template>
+<script setup>
+import { ref, onMounted } from 'vue'
+
+const subjects = ref([])
+const fetchSubjects = async () => {
+  try {
+    const response = await fetch('http://127.0.0.1:8000/api/subject')
+    const result = await response.json()
+
+    subjects.value = result.data
+  } catch (error) {
+    console.error('Error fetch subjects:', error)
+  }
+}
+
+const courses = ref([])
+const fetchCourses = async () => {
+  try {
+    const response = await fetch('http://127.0.0.1:8000/api/course')
+    const result = await response.json()
+    courses.value = result.data
+  } catch (error) {
+    console.error('Error fetch courses:', error)
+  }
+}
+onMounted(() => {
+  fetchSubjects()
+  fetchCourses()
+})
+</script>
 <style scoped>
 .home {
   display: flex;
@@ -101,4 +154,9 @@
 .hero-content {
   position: relative;
   color: #fff;
-  text-align: center;}</style>
+  text-align: center;
+}
+.card-meta {
+  font-size: 15px;
+}
+</style>

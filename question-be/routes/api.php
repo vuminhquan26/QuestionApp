@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\QuestionTypeController;
 use App\Http\Controllers\Api\AnswerTypeController;
 use App\Http\Controllers\Api\SubjectController;
 use App\Http\Controllers\Api\DashboardController;
+use App\Http\Controllers\Api\CourseController;
 
 Route::get('/question', [QuestionController::class, 'index'])->name('question.index');
 
@@ -25,3 +26,4 @@ Route::get('/answertype', [AnswerTypeController::class, 'index'])->name('answert
 
 Route::get('/subject', [SubjectController::class, 'index'])->name('subject.index');
 
+Route::get('/course', [CourseController::class, 'index'])->name('course.index');

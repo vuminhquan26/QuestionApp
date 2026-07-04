@@ -21,14 +21,15 @@
         <a-col :span="8">
           <h3>E-Learning</h3>
           <p>Nền tảng học lập trình online chất lượng cao.</p>
+          <iframe width="80%" height="150" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3124.478288225113!2d105.87838451791902!3d20.989516742664566!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3135aea74a0c0e4f%3A0x9b3699c84b07ad99!2zVHLGsOG7nW5nIFRIQ1MgVsSpbmggSMawbmc!5e1!3m2!1svi!2s!4v1783172691007!5m2!1svi!2s" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe>
         </a-col>
         <!-- LINK -->
         <a-col :span="8">
           <h4>Liên kết</h4>
           <ul>
-            <li>Khóa học</li>
-            <li>Giới thiệu</li>
-            <li>Liên hệ</li>
+            <li>Môn Học</li>
+            <li>Đề Thi</li>
+            <li>Giới Thiệu</li>
           </ul>
         </a-col>
         <a-col :span="8">
