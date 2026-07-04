@@ -1,0 +1,131 @@
+<template>
+  <a-layout class="layout">
+    <a-layout-header>
+      <div class="logo" />
+      <a-menu mode="horizontal" theme="dark" :selectedKeys="[selectedKey]" @click="handleMenuClick">
+
+        <a-menu-item key="/user">Home</a-menu-item>
+        <a-menu-item key="/user/courses">Courses</a-menu-item>
+        <a-menu-item key="/user/my-courses">My Courses</a-menu-item>
+        <a-menu-item key="/user/cart">Cart</a-menu-item>
+        <a-menu-item key="/user/profile">Profile</a-menu-item>
+      </a-menu>
+
+    </a-layout-header>
+    <a-layout-content style="padding: 0 50px">
+
+      <div :style="{ background: '#fff', padding: '24px', minHeight: '280px' }"><router-view /></div>
+    </a-layout-content>
+    <a-layout-footer class="footer">
+      <a-row :gutter="16">
+        <a-col :span="8">
+          <h3>E-Learning</h3>
+          <p>Nền tảng học lập trình online chất lượng cao.</p>
+        </a-col>
+        <!-- LINK -->
+        <a-col :span="8">
+          <h4>Liên kết</h4>
+          <ul>
+            <li>Khóa học</li>
+            <li>Giới thiệu</li>
+            <li>Liên hệ</li>
+          </ul>
+        </a-col>
+        <a-col :span="8">
+          <h4>Liên hệ</h4>
+          <p>Email: support@elearning.com</p>
+          <p>Hotline: 0123 456 789</p>
+        </a-col>
+      </a-row>
+      <a-divider />
+      <div class="copyright">
+        © 2026 E-Learning. All rights reserved.
+      </div>
+    </a-layout-footer>
+  </a-layout>
+</template>
+<script setup>
+import { ref } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+
+const route = useRoute();
+const router = useRouter();
+const selectedKey = ref(route.path);
+
+const handleMenuClick = (e) => {
+  router.push(e.key)
+}
+</script>
+<style scoped>
+.site-layout-content {
+  min-height: 280px;
+  padding: 24px;
+  background: #fff;
+}
+
+#components-layout-demo-top .logo {
+  float: left;
+  width: 120px;
+  height: 31px;
+  margin: 16px 24px 16px 0;
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.ant-row-rtl #components-layout-demo-top .logo {
+  float: right;
+  margin: 16px 0 16px 24px;
+}
+
+[data-theme='dark'] .site-layout-content {
+  background: #141414;
+}
+
+.footer {
+  background: #001529;
+  color: #fff;
+  padding: 40px 50px;
+}
+
+.footer h3,
+.footer h4 {
+  color: #fff;
+}
+
+.footer ul {
+  list-style: none;
+  padding: 0;
+}
+
+.footer li {
+  margin-bottom: 8px;
+  cursor: pointer;
+}
+
+.footer li:hover {
+  color: #1890ff;
+}
+
+.copyright {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.layout {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* CONTENT GIÃN RA */
+.ant-layout-content {
+  flex: 1;
+}
+
+/* FOOTER */
+.footer {
+  background: #001529;
+  color: #fff;
+  padding: 40px;
+}
+
+</style>

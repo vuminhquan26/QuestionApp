@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <h2>Create Question</h2>
-    <AppLayout />
+    <AdminLayout />
     <QuestionForm :action="action" :question="question" />
   </div>
 </template>

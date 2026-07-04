@@ -5,9 +5,9 @@
       <div class="logo"></div>
 
       <a-menu v-model:selectedKeys="selectedKeys" theme="dark" mode="horizontal" @click="onClick">
-        <a-menu-item key="/dashboard"> Dashboard </a-menu-item>
-        <a-menu-item key="/list"> Danh sách Câu Hỏi </a-menu-item>
-        <a-menu-item key="/create"> Tạo Câu Hỏi Mới </a-menu-item>
+        <a-menu-item key="/admin/dashboard">Dashboard</a-menu-item>
+        <a-menu-item key="/admin/questions">Danh sách Câu Hỏi</a-menu-item>
+        <a-menu-item key="/admin/questions/create">Tạo Câu Hỏi</a-menu-item>
       </a-menu>
     </a-layout-header>
 
@@ -15,12 +15,8 @@
     <a-layout>
       <!-- SIDEBAR -->
       <a-layout-sider width="200" style="background: #fff">
-        <a-menu
-          v-model:selectedKeys="selectedKeys2"
-          v-model:openKeys="openKeys"
-          mode="inline"
-          style="height: 100%; border-right: 0"
-        >
+        <a-menu v-model:selectedKeys="selectedKeys2" v-model:openKeys="openKeys" mode="inline"
+          style="height: 100%; border-right: 0">
           <a-sub-menu key="sub1">
             <template #title>
               <span>
@@ -39,14 +35,12 @@
 
       <!-- CONTENT (QUAN TRỌNG) -->
       <a-layout style="padding: 0 24px 24px">
-        <a-layout-content
-          :style="{
-            background: '#fff',
-            padding: '24px',
-            margin: 0,
-            minHeight: '280px',
-          }"
-        >
+        <a-layout-content :style="{
+          background: '#fff',
+          padding: '24px',
+          margin: 0,
+          minHeight: '280px',
+        }">
           <!-- PAGE RENDER HERE -->
           <router-view />
         </a-layout-content>
