@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\SubjectController;
 use App\Http\Controllers\Api\DashboardController;
 use App\Http\Controllers\Api\CourseController;
 use App\Http\Controllers\Api\CampusController;
+use App\Http\Controllers\Api\AuthController;
 
 Route::get('/question', [QuestionController::class, 'index'])->name('question.index');
 
@@ -30,3 +31,6 @@ Route::get('/subject', [SubjectController::class, 'index'])->name('subject.index
 Route::get('/course', [CourseController::class, 'index'])->name('course.index');
 
 Route::get('/campus', [CampusController::class, 'index'])->name('campus.index');
+
+Route::post('/register', [AuthController::class, 'register']);
+Route::post('/login', [AuthController::class, 'login']);

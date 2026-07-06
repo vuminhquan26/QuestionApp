@@ -21,6 +21,10 @@ use App\Services\Implementations\CourseService;
 
 use App\Services\Interfaces\CampusServiceInterface;
 use App\Services\Implementations\CampusService;
+
+use App\Services\Interfaces\AuthServiceInterface;
+use App\Services\Implementations\AuthService;
+
 class AppServiceProvider extends ServiceProvider
 {
     public function register(): void
@@ -53,6 +57,11 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(
             CampusServiceInterface::class,
             CampusService::class
+        );
+
+        $this->app->bind(
+            AuthServiceInterface::class,
+            AuthService::class
         );
     }
 

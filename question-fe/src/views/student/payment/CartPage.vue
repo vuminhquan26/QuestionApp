@@ -1,7 +1,6 @@
 <template>
   <div class="cart">
 
-```
 <!-- TITLE -->
 <h1>Giỏ hàng</h1>
 
@@ -62,7 +61,6 @@
   </a-col>
 
 </a-row>
-```
 
   </div>
 </template>

@@ -5,9 +5,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class User extends Model
 {
+
     public $incrementing = false;
     protected $keyType = 'string';
     protected $table = 'ho.users';
+    protected $hidden = ['password'];
     protected $fillable = [
         'id',
         'name',
@@ -31,14 +33,14 @@ class User extends Model
         'ward_name',
         'organization_name',
         'grade_level_id',
-        
+
     ];
 
     // USER -> ASSESSMENT SETS (created_by)
     public function assessmentSets()
     {
         return $this->hasMany(AssessmentSet::class, 'created_by', 'id');
-    }    
+    }
     public function role()
     {
         return $this->belongsToMany(
