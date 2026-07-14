@@ -4,11 +4,14 @@
       <div class="logo" />
       <a-menu mode="horizontal" theme="dark" :selectedKeys="[selectedKey]" @click="handleMenuClick">
 
-        <a-menu-item key="/user">Home</a-menu-item>
-        <a-menu-item key="/user/courses">Courses</a-menu-item>
-        <a-menu-item key="/user/my-courses">My Courses</a-menu-item>
-        <a-menu-item key="/user/cart">Cart</a-menu-item>
-        <a-menu-item key="/user/profile">Profile</a-menu-item>
+        <a-menu-item key="/student">Home</a-menu-item>
+        <a-menu-item key="/student/courses">Courses</a-menu-item>
+        <a-menu-item key="/student/my-courses">My Courses</a-menu-item>
+        <a-menu-item key="/student/cart">Cart</a-menu-item>
+        <a-menu-item key="/student/profile">Profile</a-menu-item>
+        <a-menu-item key="logout">
+          <span @click="logout">Logout</span>
+        </a-menu-item>
       </a-menu>
 
     </a-layout-header>
@@ -54,7 +57,15 @@ const router = useRouter();
 const selectedKey = ref(route.path);
 
 const handleMenuClick = (e) => {
+  if(e.key === 'logout') return
+
   router.push(e.key)
+}
+
+const logout = () => {
+  localStorage.removeItem('token')
+  localStorage.removeItem('role')
+  router.push('/auth/login')
 }
 </script>
 <style scoped>

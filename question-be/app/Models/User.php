@@ -2,8 +2,10 @@
 
 namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
+use Tymon\JWTAuth\Contracts\JWTSubject;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class User extends Model
+class User extends Authenticatable implements JWTSubject
 {
 
     public $incrementing = false;
@@ -36,6 +38,12 @@ class User extends Model
 
     ];
 
+    public function getJWTIdentifier() {
+        return $this->getKey();
+    }
+    public function getJWTCustomClaims() {
+        return [];
+    }
     // USER -> ASSESSMENT SETS (created_by)
     public function assessmentSets()
     {

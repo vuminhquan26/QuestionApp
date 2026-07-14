@@ -36,7 +36,10 @@ import TeacherDashboard from '@/views/teacher/dashboard/Dashboard.vue'
 import CourseList from '@/views/teacher/course/CourseList.vue'
 import CourseCreate from '@/views/teacher/course/CourseCreate.vue'
 import StudentList from '@/views/teacher/student/StudentList.vue'
-
+import TeacherClassList from '@/views/teacher/class/TeacherClassList.vue'
+import TeacherClassCreate from '@/views/teacher/class/TeacherClassCreate.vue'
+import TeacherClassDetail from '@/views/teacher/class/TeacherClassDetail.vue'
+import TeacherClassSession from '@/views/teacher/class/TeacherClassSession.vue'
 // Auth Views
 import LoginPage from '../views/auth/LoginPage.vue'
 import RegisterPage from '../views/auth/RegisterPage.vue'
@@ -56,6 +59,7 @@ const AdminRoutes = [
   {
     path: '/admin',
     component: AdminLayout,
+    meta: {role:'admin'},
     children: [
       {
         path: '',
@@ -97,6 +101,7 @@ const TeacherRoutes = [
   {
     path: '/teacher',
     component: TeacherLayout,
+    meta: {role:'teacher'},
     children: [
       {
         path: '',
@@ -128,6 +133,23 @@ const TeacherRoutes = [
         name: 'teacher.student.list',
         component: StudentList,
       },
+
+      {
+        path: 'classes',
+        component: () => import('@/views/teacher/class/TeacherClassList.vue'),
+      },
+      {
+        path: 'classes/create',
+        component: () => import('@/views/teacher/class/TeacherClassCreate.vue'),
+      },
+      {
+        path: 'classes/:id/sessions',
+        component: () => import('@/views/teacher/class/TeacherClassSession.vue'),
+      },
+      {
+        path: 'classes/:id',
+        component: () => import('@/views/teacher/class/TeacherClassDetail.vue'),
+      },
     ],
   },
 ]
@@ -135,6 +157,7 @@ const StudentRoute = [
   {
     path: '/student',
     component: UserLayout,
+    meta:{role:'student'},
     children: [
       { path: '/', redirect: '/user' },
       { path: '', name: 'home', component: HomePage },
@@ -174,18 +197,42 @@ const AuthRoutes = [
       {
         path: 'register-student',
         name: 'register-student',
-        component: RegisterStudent
+        component: RegisterStudent,
       },
       {
         path: 'register-teacher',
         name: 'register-teacher',
-        component: RegisterTeacher
-      }
+        component: RegisterTeacher,
+      },
     ],
   },
 ]
 
-export default createRouter({
+const router = createRouter({
   history: createWebHistory(),
-  routes: [...DefaultRoute, ...AdminRoutes, ...StudentRoute, ...AuthRoutes,...TeacherRoutes],
+  routes: [...DefaultRoute, ...AdminRoutes, ...StudentRoute, ...AuthRoutes, ...TeacherRoutes],
 })
+router.beforeEach((to, from) => {
+  const token = localStorage.getItem('token')
+  const role = localStorage.getItem('role')?.toLowerCase()
+
+  // chưa login
+  if (!token && !to.path.startsWith('/auth')) {
+    return '/auth/login'
+  }
+
+  // đã login mà vào login lại
+  if (token && to.path === '/auth/login') {
+    return `/${role}`
+  }
+
+  // lấy role từ matched route
+  const requiredRole = to.matched.find(r => r.meta.role)?.meta.role
+
+  if (requiredRole && requiredRole !== role) {
+    return `/${role}`
+  }
+
+  return true
+})
+export default router

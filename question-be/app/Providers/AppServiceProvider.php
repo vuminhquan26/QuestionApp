@@ -25,6 +25,18 @@ use App\Services\Implementations\CampusService;
 use App\Services\Interfaces\AuthServiceInterface;
 use App\Services\Implementations\AuthService;
 
+use App\Services\Interfaces\Teacher\CourseServiceInterface as TeacherCourseServiceInterface;
+use App\Services\Implementations\Teacher\CourseService as TeacherCourseService;
+
+use App\Services\Interfaces\Teacher\ClassServiceInterface;
+use App\Services\Implementations\Teacher\ClassService;
+
+use App\Services\Interfaces\Teacher\ClassCourseServiceInterface;
+use App\Services\Implementations\Teacher\ClassCourseService;
+
+use App\Services\Interfaces\Teacher\ClassSessionServiceInterface;
+use App\Services\Implementations\Teacher\ClassSessionService;
+
 class AppServiceProvider extends ServiceProvider
 {
     public function register(): void
@@ -63,6 +75,14 @@ class AppServiceProvider extends ServiceProvider
             AuthServiceInterface::class,
             AuthService::class
         );
+
+        $this->app->bind(
+            TeacherCourseServiceInterface::class,
+            TeacherCourseService::class
+        );
+        $this->app->bind(ClassServiceInterface::class, ClassService::class);
+        $this->app->bind(ClassCourseServiceInterface::class, ClassCourseService::class);
+        $this->app->bind(ClassSessionServiceInterface::class, ClassSessionService::class);
     }
 
     public function boot(): void

@@ -8,6 +8,6 @@ use Illuminate\Http\Request;
 
 class SubjectService implements SubjectServiceInterface{
     public function getList(Request $request){
-        return Subject::query()->get();
+        return Subject::query()->get()->toArray();
     }
 }

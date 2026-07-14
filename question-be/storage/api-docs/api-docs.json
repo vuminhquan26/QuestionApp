@@ -1,0 +1,54 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Question API",
+        "description": "API hệ thống đề thi",
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://127.0.0.1:8000",
+            "description": "Local Server"
+        }
+    ],
+    "paths": {
+        "/api/campus": {
+            "get": {
+                "tags": [
+                    "Campus"
+                ],
+                "summary": "Get list campus",
+                "operationId": "ca4f9c238ba5d6d39455d7948ed0f60b",
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    }
+                }
+            }
+        },
+        "/api/courses": {
+            "get": {
+                "tags": [
+                    "Courses"
+                ],
+                "summary": "Get list courses",
+                "operationId": "d452dd5ed2fa44f48bd98e5677e3cc3f",
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    }
+                }
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Campus",
+            "description": "Campus"
+        },
+        {
+            "name": "Courses",
+            "description": "Courses"
+        }
+    ]
+}

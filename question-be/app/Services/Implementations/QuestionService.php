@@ -3,9 +3,6 @@
 namespace App\Services\Implementations;
 
 use App\Services\Interfaces\QuestionServiceInterface;
-use App\Models\AssessmentSet;
-use App\Models\User;
-use App\Models\AssessmentSetDetail;
 use App\Models\AssessmentItem;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
@@ -16,9 +13,10 @@ class QuestionService implements QuestionServiceInterface
     {
         return AssessmentItem::with(['subject', 'creator'])
             ->when($request->keyword, function ($q, $keyword) {
-                $q->where('title', 'ILIKE', "%{$keyword}%")
-                    ->orWhere('id', $keyword)
-                    ->orderBy('created_at', 'asc');
+                $q->where(function ($query) use ($keyword) {
+                    $query->where('title', 'ILIKE', "%{$keyword}%")
+                        ->orWhere('id', $keyword);
+                });
             })
             ->orderBy('created_at', 'desc')
             ->paginate(20);
@@ -26,26 +24,8 @@ class QuestionService implements QuestionServiceInterface
 
     public function getDetail(string $id)
     {
-        $item = AssessmentItem::with(['subject', 'creator', 'answerType'])
+        return AssessmentItem::with(['subject', 'creator', 'answerType'])
             ->find($id);
-
-        if (!$item) {
-            return response()->json(['message' => 'Not found'], 404);
-        }
-
-        return [
-            'id' => $item->id,
-            'title' => $item->title,
-            'subject_id' => $item->subject_id,
-            'question_type_code' => $item->question_type_code,
-            'answer_type_code' => $item->answer_type_code,
-            'difficulty' => $item->difficulty,
-            'score' => $item->score,
-            'status' => $item->status,
-            'version' => $item->version,
-            'question_data' => $item->question_data,
-            'answer_data' => $item->answer_data,
-        ];
     }
 
     public function create(Request $request)
@@ -64,14 +44,19 @@ class QuestionService implements QuestionServiceInterface
             'score' => $request->score,
             'status' => 1,
             'version' => 1,
+            'created_by' => auth()->id(),
         ]);
     }
 
     public function update(string $id, Request $request)
     {
-        $assessmentItem = AssessmentItem::findOrFail($id);
+        $item = AssessmentItem::findOrFail($id);
 
-        $assessmentItem->update([
+        if ($item->created_by !== auth()->id()) {
+            throw new \Exception('Bạn không có quyền sửa');
+        }
+
+        $item->update([
             'question_type_code' => $request->question_type_code,
             'answer_type_code' => $request->answer_type_code,
             'subject_id' => $request->subject_id,
@@ -83,21 +68,22 @@ class QuestionService implements QuestionServiceInterface
             'difficulty' => $request->difficulty,
             'score' => $request->score,
             'status' => 1,
-            'version' => 1,
+            'version' => $item->version + 1,
         ]);
 
-        return $assessmentItem;
+        return $item;
     }
 
     public function delete(string $id)
     {
-        AssessmentItem::destroy($id);
+        $item = AssessmentItem::findOrFail($id);
+        if ($item->created_by !== auth()->id()) {
+            throw new \Exception('Bạn không có quyền xoá');
+        }
 
-        return ['message' => 'Deleted successfully'];
+        $item->delete();
+
+        return true;
     }
-    public function find($id)
-    {
-        return AssessmentItem::with(['answerType', 'subject'])
-            ->findOrFail($id);
-    }
+
 }
