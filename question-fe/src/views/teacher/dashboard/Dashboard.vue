@@ -1,34 +1,76 @@
 <template>
-  <div class="teacher-dashboard">
-    <h1>Teacher Dashboard</h1>
+  <div class="min-h-screen bg-gray-100 p-6">
 
-    <a-row :gutter="16">
-      <a-col :span="8">
-        <a-card>
-          <h3>Tổng khóa học</h3>
-          <p>{{ stats.courses }}</p>
+    <!-- TITLE -->
+    <div class="mb-6">
+      <h1 class="text-2xl font-semibold text-gray-800">
+        Teacher Dashboard
+      </h1>
+      <p class="text-gray-500">
+        Overview of your teaching activity
+      </p>
+    </div>
+
+    <!-- STATS -->
+    <a-row :gutter="[16, 16]">
+
+      <!-- COURSES -->
+      <a-col :xs="24" :md="8">
+        <a-card class="rounded-xl shadow-sm hover:shadow-md transition">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-gray-500 text-sm">Courses</p>
+              <h2 class="text-2xl font-bold text-gray-800">
+                {{ stats.courses }}
+              </h2>
+            </div>
+            <div class="text-blue-500 text-3xl">📘</div>
+          </div>
         </a-card>
       </a-col>
 
-      <a-col :span="8">
-        <a-card>
-          <h3>Học viên</h3>
-          <p>{{ stats.students }}</p>
+      <!-- STUDENTS -->
+      <a-col :xs="24" :md="8">
+        <a-card class="rounded-xl shadow-sm hover:shadow-md transition">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-gray-500 text-sm">Students</p>
+              <h2 class="text-2xl font-bold text-gray-800">
+                {{ stats.students }}
+              </h2>
+            </div>
+            <div class="text-green-500 text-3xl">👨‍🎓</div>
+          </div>
         </a-card>
       </a-col>
 
-      <a-col :span="8">
-        <a-card>
-          <h3>Bài kiểm tra</h3>
-          <p>{{ stats.exams }}</p>
+      <!-- EXAMS -->
+      <a-col :xs="24" :md="8">
+        <a-card class="rounded-xl shadow-sm hover:shadow-md transition">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-gray-500 text-sm">Exams</p>
+              <h2 class="text-2xl font-bold text-gray-800">
+                {{ stats.exams }}
+              </h2>
+            </div>
+            <div class="text-purple-500 text-3xl">📝</div>
+          </div>
         </a-card>
       </a-col>
+
     </a-row>
+
   </div>
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue'
+import { getTeacherDashboard } from '@/services/dashboardService'
+
+// state
+const dashboard = ref(null)
+const loading = ref(false)
 
 const stats = ref({
   courses: 0,
@@ -36,12 +78,29 @@ const stats = ref({
   exams: 0
 })
 
-onMounted(() => {
-  // fake data (sau này gọi API)
-  stats.value = {
-    courses: 5,
-    students: 120,
-    exams: 20
+// fetch data
+const fetchDashboard = async () => {
+  try {
+    loading.value = true
+
+    const res = await getTeacherDashboard()
+
+    dashboard.value = res.data
+
+    // map data
+    stats.value = {
+      courses: res.data?.courses ?? 0,
+      students: res.data?.students ?? 0,
+      exams: res.data?.exams ?? 0
+    }
+
+  } catch (err) {
+    console.error('Dashboard error:', err)
+  } finally {
+    loading.value = false
   }
-})
+}
+
+// lifecycle
+onMounted(fetchDashboard)
 </script>

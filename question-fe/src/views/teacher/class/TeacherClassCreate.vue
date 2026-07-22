@@ -27,45 +27,41 @@
 <script setup>
 import { reactive } from 'vue'
 import { useRouter } from 'vue-router'
+import { message } from 'ant-design-vue'
+import dayjs from 'dayjs'
+
 
 const router = useRouter()
 
 const form = reactive({
   name: '',
   class_code: '',
-  start_date: '',
+  start_date: null,
   description: '',
   syllabus_id: 'DEFAULT'
 })
 
+const loading = reactive({ value: false })
+
 const handleSubmit = async () => {
-  try {
-    const token = localStorage.getItem('token')
+  loading.value = true
 
-    if (!token) {
-      throw new Error('Chưa đăng nhập')
-    }
+  const payload = {
+    ...form,
+    start_date: form.start_date
+      ? dayjs(form.start_date).format('YYYY-MM-DD')
+      : null
+  }
 
-    const res = await fetch('http://127.0.0.1:8000/api/teacher/classes', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`,
-        'Accept': 'application/json'
-      },
-      body: JSON.stringify(form)
-    })
+  const res = await createClass(payload)
 
-    const data = await res.json()
+  loading.value = false
 
-    if (!res.ok) {
-      throw new Error(data.message || 'Tạo lớp thất bại')
-    }
-
+  if (res?.status) {
+    message.success('Tạo lớp thành công')
     router.push('/teacher/classes')
-
-  } catch (err) {
-    console.error(err)
+  } else {
+    message.error(res?.message || 'Tạo lớp thất bại')
   }
 }
 </script>

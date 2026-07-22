@@ -4,7 +4,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-
+use App\Models\Classes;
+use App\Models\Role;
+use Illuminate\Support\Str;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 class User extends Authenticatable implements JWTSubject
 {
 
@@ -37,6 +40,16 @@ class User extends Authenticatable implements JWTSubject
         'grade_level_id',
 
     ];
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($model) {
+            if (!$model->id) {
+                $model->id = (string) Str::uuid();
+            }
+        });
+    }
 
     public function getJWTIdentifier() {
         return $this->getKey();
@@ -56,6 +69,24 @@ class User extends Authenticatable implements JWTSubject
             'ho.model_has_roles',
             'model_id',
             'role_id'
+        );
+    }
+    public function roles(): BelongsToMany
+    {
+        return $this->belongsToMany(
+            Role::class,
+            'model_has_roles',
+            'model_id',
+            'role_id'
+        );
+    }
+    public function classes()
+    {
+        return $this->belongsToMany(
+            Classes::class,
+            'enroll_class_users',
+            'user_id',
+            'class_id'
         );
     }
 }

@@ -13,7 +13,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
-import { questionService } from '@/services/question_service'
+
 import QuestionForm from '@/components/forms/QuestionForm.vue'
 
 const route = useRoute()

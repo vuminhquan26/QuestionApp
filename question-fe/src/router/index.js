@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
+import { getToken } from '../services/storage'
 import AdminLayout from '@/layouts/AdminLayout.vue'
 import UserLayout from '@/layouts/UserLayout.vue'
 import AuthLayout from '@/layouts/AuthLayout.vue'
@@ -27,7 +28,8 @@ import ProfilePage from '../views/student/profile/ProfilePage.vue'
 import ChangePassword from '../views/student/profile/ChangePassword.vue'
 import MyCourse from '../views/student/profile/MyCourses.vue'
 import Setting from '../views/student/profile/Settings.vue'
-import LearningHistory from '../views/student/profile/LearningHistory.vue'
+import StudentClassList from '../views/student/class/StudentClassList.vue'
+import ClassList from '../views/student/class/ClassList.vue'
 
 import TeacherLayout from '@/layouts/TeacherLayout.vue'
 
@@ -47,7 +49,8 @@ import Register from '../views/auth/Register.vue'
 import ForgotPassword from '../views/auth/ForgotPassword.vue'
 import RegisterStudent from '../views/auth/RegisterStudent.vue'
 import RegisterTeacher from '../views/auth/RegisterTeacher.vue'
-
+import SocialCallback from '../views/auth/SocialCallback.vue'
+import SelectRole from '../views/auth/SelectRole.vue'
 const DefaultRoute = [
   {
     path: '/',
@@ -55,11 +58,24 @@ const DefaultRoute = [
   },
 ]
 
+const SocialRoutes = [
+  {
+    path: '/social-callback',
+    name: 'SocialCallback',
+    component: SocialCallback,
+  },
+  {
+    path: '/select-role',
+    name: 'SelectRole',
+    component: SelectRole,
+  },
+]
+
 const AdminRoutes = [
   {
     path: '/admin',
     component: AdminLayout,
-    meta: {role:'admin'},
+    meta: { role: 'admin' },
     children: [
       {
         path: '',
@@ -101,7 +117,7 @@ const TeacherRoutes = [
   {
     path: '/teacher',
     component: TeacherLayout,
-    meta: {role:'teacher'},
+    meta: { role: 'teacher' },
     children: [
       {
         path: '',
@@ -157,7 +173,7 @@ const StudentRoute = [
   {
     path: '/student',
     component: UserLayout,
-    meta:{role:'student'},
+    meta: { role: 'student' },
     children: [
       { path: '/', redirect: '/user' },
       { path: '', name: 'home', component: HomePage },
@@ -175,7 +191,9 @@ const StudentRoute = [
       { path: 'change-password', name: 'change-password', component: ChangePassword },
       { path: 'my-courses', name: 'my-courses', component: MyCourse },
       { path: 'settings', name: 'settings', component: Setting },
-      { path: 'learning-history', name: 'learning-history', component: LearningHistory },
+      // { path: 'learning-history', name: 'learning-history', component: LearningHistory },
+      { path: 'class', name: 'class', component: StudentClassList },
+      { path: 'classlist', name: 'classlist', component: ClassList },
     ],
   },
 ]
@@ -208,31 +226,29 @@ const AuthRoutes = [
   },
 ]
 
+const routes = [
+  ...SocialRoutes,
+  ...DefaultRoute,
+  ...AuthRoutes,
+  ...AdminRoutes,
+  ...TeacherRoutes,
+  ...StudentRoute,
+]
+
 const router = createRouter({
   history: createWebHistory(),
-  routes: [...DefaultRoute, ...AdminRoutes, ...StudentRoute, ...AuthRoutes, ...TeacherRoutes],
+  routes,
 })
+
+// kiểm tra trước khi vào route
 router.beforeEach((to, from) => {
-  const token = localStorage.getItem('token')
-  const role = localStorage.getItem('role')?.toLowerCase()
+  const token = getToken() // lấy token
 
-  // chưa login
-  if (!token && !to.path.startsWith('/auth')) {
-    return '/auth/login'
-  }
-
-  // đã login mà vào login lại
-  if (token && to.path === '/auth/login') {
-    return `/${role}`
-  }
-
-  // lấy role từ matched route
-  const requiredRole = to.matched.find(r => r.meta.role)?.meta.role
-
-  if (requiredRole && requiredRole !== role) {
-    return `/${role}`
+  if (to.meta.requiresAuth && !token) {
+    return '/auth/login' // chưa login → về login
   }
 
   return true
 })
+
 export default router

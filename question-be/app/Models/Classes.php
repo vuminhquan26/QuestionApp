@@ -8,8 +8,8 @@ class Classes extends Model
 {
     protected $table = 'ho.classes';
 
-    // public $incrementing = false;
-    // protected $keyType = 'string';
+    public $incrementing = false;
+    protected $keyType = 'string';
 
     protected $fillable = [
         'id',
@@ -34,5 +34,9 @@ class Classes extends Model
     public function sessions()
     {
         return $this->hasMany(ClassDetail::class, 'class_id');
+    }
+    public function enrolls()
+    {
+        return $this->hasMany(EnrollClassUser::class, 'class_id');
     }
 }

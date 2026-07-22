@@ -76,32 +76,23 @@ const form = ref({
 })
 
 const submitForm = async () => {
-  try {
-    const payload = {
-      ...form.value,
-      birth_date: form.value.birth_date
-        ? Number(dayjs(form.value.birth_date).format('YYYYMMDD'))
-        : null
-    }
+  const payload = {
+    ...form.value,
+    birth_date: form.value.birth_date
+      ? Number(dayjs(form.value.birth_date).format('YYYYMMDD'))
+      : null
+  }
 
-    const res = await fetch('http://127.0.0.1:8000/api/register', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
-    })
+  const res = await register(payload)
 
-    const data = await res.json()
-
-    if (res.ok) {
-      message.success('Register success')
-    } else {
-      message.error(data.message || 'Register failed')
-    }
-  } catch (e) {
-    message.error('Server error')
+  if (res?.status) {
+    message.success('Register success')
+  } else {
+    message.error(res?.message || 'Register failed')
   }
 }
 </script>
+
 
 <style scoped>
 .register-wrapper {
@@ -117,7 +108,7 @@ const submitForm = async () => {
   background: #fff;
   padding: 30px;
   border-radius: 10px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
 }
 
 .title {

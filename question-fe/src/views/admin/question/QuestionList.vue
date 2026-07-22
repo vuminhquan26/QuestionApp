@@ -1,11 +1,6 @@
 <template>
   <!-- Khung bảng -->
-  <a-table
-    :columns="columns"
-    :data-source="questions"
-    :pagination="pagination"
-    @change="handleTableChange"
-  >
+  <a-table :columns="columns" :data-source="questions" :pagination="pagination" @change="handleTableChange">
     <template #bodyCell="{ column, record }">
       <template v-if="column.key === 'operation'">
         <a-button type="primary" @click="goDetail(record.id)">Xem</a-button>
@@ -15,10 +10,9 @@
     </template>
   </a-table>
 </template>
-<script setup >
+<script setup>
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import { questionService } from '@/services/question_service'
 
 const router = useRouter()
 
@@ -139,6 +133,7 @@ onMounted(() => {
 #components-table-demo-summary tfoot td {
   background: #fafafa;
 }
+
 [data-theme='dark'] #components-table-demo-summary tfoot th,
 [data-theme='dark'] #components-table-demo-summary tfoot td {
   background: #1d1d1d;
@@ -154,6 +149,7 @@ onMounted(() => {
   background-color: #d48806;
   border-color: #d48806;
 }
+
 .action-wrapper {
   display: flex;
   justify-content: center;

@@ -1,29 +1,18 @@
 <template>
   <a-form layout="vertical" :model="form" @finish="submitForm">
     <!-- TITLE -->
-    <a-form-item
-      label="Tiêu đề"
-      name="title"
-      :rules="[{ required: true, message: 'Nhập tiêu đề' }]"
-    >
+    <a-form-item label="Tiêu đề" name="title" :rules="[{ required: true, message: 'Nhập tiêu đề' }]">
       <a-input v-model:value="form.title" />
     </a-form-item>
 
     <!-- QUESTION -->
-    <a-form-item
-      label="Nội dung câu hỏi"
-      name="question_content"
-      :rules="[{ required: true, message: 'Nhập câu hỏi' }]"
-    >
+    <a-form-item label="Nội dung câu hỏi" name="question_content"
+      :rules="[{ required: true, message: 'Nhập câu hỏi' }]">
       <a-textarea v-model:value="form.question_content" :rows="3" />
     </a-form-item>
 
     <!-- SUBJECT -->
-    <a-form-item
-      label="Môn học"
-      name="subject_id"
-      :rules="[{ required: true, message: 'Chọn môn' }]"
-    >
+    <a-form-item label="Môn học" name="subject_id" :rules="[{ required: true, message: 'Chọn môn' }]">
       <a-select v-model:value="form.subject_id">
         <a-select-option v-for="s in subject" :key="s.id" :value="s.id">
           {{ s.name }}
@@ -32,11 +21,8 @@
     </a-form-item>
 
     <!-- QUESTION TYPE -->
-    <a-form-item
-      label="Loại câu hỏi"
-      name="question_type_code"
-      :rules="[{ required: true, message: 'Chọn loại câu hỏi' }]"
-    >
+    <a-form-item label="Loại câu hỏi" name="question_type_code"
+      :rules="[{ required: true, message: 'Chọn loại câu hỏi' }]">
       <a-select v-model:value="form.question_type_code">
         <a-select-option v-for="t in question_type" :key="t.code" :value="t.code">
           {{ t.description }}
@@ -45,11 +31,7 @@
     </a-form-item>
 
     <!-- ANSWER TYPE -->
-    <a-form-item
-      label="Loại đáp án"
-      name="answer_type_code"
-      :rules="[{ required: true, message: 'Chọn loại đáp án' }]"
-    >
+    <a-form-item label="Loại đáp án" name="answer_type_code" :rules="[{ required: true, message: 'Chọn loại đáp án' }]">
       <a-select v-model:value="form.answer_type_code">
         <a-select-option v-for="t in answer_type" :key="t.code" :value="t.code">
           {{ t.description }}
@@ -92,8 +74,6 @@
 import { ref, onMounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { message } from 'ant-design-vue'
-import { questionService } from '@/services/question_service'
-
 const route = useRoute()
 const router = useRouter()
 
@@ -162,10 +142,10 @@ watch(
 
     form.value.answers = { A: '', B: '', C: '', D: '' }
 
-  answers.forEach((item, index) => {
-    const key = ['A', 'B', 'C', 'D'][index]
-    if (key) form.value.answers[key] = item.answer_content
-  })
+    answers.forEach((item, index) => {
+      const key = ['A', 'B', 'C', 'D'][index]
+      if (key) form.value.answers[key] = item.answer_content
+    })
 
     if (val.answer_data?.correct_answer?.length) {
       const correct = val.answer_data.correct_answer[0]
@@ -235,6 +215,7 @@ const submitForm = async () => {
   margin-bottom: 8px;
   align-items: center;
 }
+
 .answer-row span {
   width: 20px;
 }

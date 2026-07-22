@@ -1,12 +1,15 @@
 <?php
-// studentAC2C@gmail.com
-// teachertest@gmail.com
+
+// studentAC2C@gmail.com | teachertest@gmail.com
+
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Services\Interfaces\AuthServiceInterface;
-
+use Laravel\Socialite\Facades\Socialite;
+use Illuminate\Support\Str;
+use App\Models\User;
 class AuthController extends Controller
 {
     protected $service;
@@ -15,64 +18,36 @@ class AuthController extends Controller
     {
         $this->service = $service;
 
-        // chỉ login/register không cần token
         $this->middleware('auth:api', [
-            'except' => ['login', 'register']
+            'except' => [
+                'login',
+                'register',
+                'refresh',
+                'redirect',
+                'callback'
+            ]
         ]);
     }
 
-    /**
-     * REGISTER
-     */
+    // REGISTER: nhận request -> gọi service tạo user -> trả JSON response
     public function register(Request $request)
     {
-        $res = $this->service->register($request);
-
-        if (!$res['status']) {
-            return response()->json($res, 400);
-        }
-
-        return response()->json($res, 201);
+        return response()->json($this->service->register($request)); // delegate toàn bộ logic cho service
     }
 
-    /**
-     * LOGIN
-     */
+    // LOGIN: validate credentials -> generate JWT token -> trả về token + user info
     public function login(Request $request)
     {
-        try {
-            return response()->json($this->service->login($request));
-        } catch (\Throwable $e) {
-            return response()->json([
-                'error' => $e->getMessage(),
-                'line' => $e->getLine(),
-            ], 500);
-        }
+        return response()->json($this->service->login($request)); // service sẽ handle attempt + token
     }
-    // public function login(Request $request)
-    // {
-    //     $res = $this->service->login($request);
 
-    //     if (!$res['status']) {
-    //         return response()->json($res, 401);
-    //     }
-
-    //     return response()->json($res, 200);
-    // }
-
-    /**
-     * LOGOUT
-     */
+    // LOGOUT: invalidate token hiện tại (user không dùng lại được token cũ)
     public function logout()
     {
-        $res = $this->service->logout();
-
-        return response()->json($res);
+        return response()->json($this->service->logout()); // service gọi JWTAuth::invalidate()
     }
 
-    /**
-     * REFRESH TOKEN
-     */
+    // REFRESH TOKEN: tạo token mới từ token cũ (giữ session user)
     public function refresh()
     {
         $res = $this->service->refresh();
@@ -84,13 +59,38 @@ class AuthController extends Controller
         return response()->json($res);
     }
 
-    /**
-     * PROFILE
-     */
+    // PROFILE: lấy thông tin user hiện tại từ token (decode JWT)
     public function profile()
     {
-        $res = $this->service->profile();
+        return [
+            'status' => true,
+            'data' => auth()->user()
+        ];
+    }
 
-        return response()->json($res);
+    public function redirect($provider)
+    {
+        return Socialite::driver($provider)->stateless()->redirect();
+    }
+
+    public function callback($provider)
+    {
+        $socialUser = Socialite::driver($provider)->stateless()->user();
+
+        $user = User::updateOrCreate(
+            ['email' => $socialUser->getEmail()],
+            [
+                'name' => $socialUser->getName(),
+                'password' => bcrypt(uniqid()),
+            ]
+        );
+
+        $token = auth('api')->login($user);
+
+        return redirect("http://localhost:5173/social-callback?token=$token&email=".$user->email."&name=".$user->name);
+    }
+    public function socialLogin(Request $request)
+    {
+        return $this->service->socialLogin($request);
     }
 }

@@ -44,10 +44,6 @@ const fetchData = async () => {
 
     const token = localStorage.getItem('token')
 
-    if (!token) {
-      throw new Error('Chưa có token')
-    }
-
     const res = await fetch('http://127.0.0.1:8000/api/teacher/classes', {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -55,13 +51,10 @@ const fetchData = async () => {
       }
     })
 
-    const data = await res.json()
+    const result = await res.json()
 
-    if (!res.ok) {
-      throw new Error(data.message || 'API error')
-    }
-
-    classes.value = data.data.data
+    console.log('classes API:', result)
+    classes.value = result.data.data
 
   } catch (err) {
     console.error(err)

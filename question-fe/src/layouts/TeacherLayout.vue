@@ -1,29 +1,27 @@
 <template>
-  <a-layout style="min-height: 100vh">
+  <a-layout class="min-h-screen">
 
     <!-- SIDEBAR -->
-    <a-layout-sider collapsible v-model:collapsed="collapsed">
-      <div class="logo">TEACHER</div>
+    <a-layout-sider collapsible v-model:collapsed="collapsed" class="!bg-[#001529]">
+      <div class="h-14 flex items-center justify-center text-white font-bold text-lg">
+        🎓 {{ collapsed ? 'T' : 'Teacher' }}
+      </div>
 
-      <a-menu
-        theme="dark"
-        mode="inline"
-        :selectedKeys="[selectedKey]"
-      >
+      <a-menu theme="dark" mode="inline" :selectedKeys="[selectedKey]">
         <a-menu-item key="/teacher/dashboard" @click="go('/teacher/dashboard')">
-          Dashboard
+          📊 Dashboard
         </a-menu-item>
 
         <a-menu-item key="/teacher/classes" @click="go('/teacher/classes')">
-          Classes
+          🏫 Classes
         </a-menu-item>
 
         <a-menu-item key="/teacher/courses" @click="go('/teacher/courses')">
-          Courses
+          📘 Courses
         </a-menu-item>
 
         <a-menu-item key="/teacher/students" @click="go('/teacher/students')">
-          Students
+          👨‍🎓 Students
         </a-menu-item>
       </a-menu>
     </a-layout-sider>
@@ -32,18 +30,29 @@
     <a-layout>
 
       <!-- HEADER -->
-      <a-layout-header class="header">
-        <div class="right">
-          <span class="username">Teacher</span>
-          <a-button type="link" danger @click="logout">
+      <a-layout-header class="bg-white px-6 flex justify-between items-center shadow-sm">
+
+        <h2 class="font-semibold text-gray-700">
+          {{ pageTitle }}
+        </h2>
+
+        <div class="flex items-center gap-4">
+          <span class="text-gray-600">👤 Teacher</span>
+
+          <a-button type="primary" danger @click="logout">
             Logout
           </a-button>
         </div>
+
       </a-layout-header>
 
       <!-- CONTENT -->
-      <a-layout-content class="content">
-        <router-view />
+      <a-layout-content class="p-6 bg-gray-100">
+
+        <div class="bg-white p-6 rounded-xl shadow-sm min-h-[300px]">
+          <router-view />
+        </div>
+
       </a-layout-content>
 
     </a-layout>
@@ -54,7 +63,10 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-
+// title tự động theo route name
+const pageTitle = computed(() => {
+  return route.name || 'Dashboard'
+})
 const collapsed = ref(false)
 const router = useRouter()
 const route = useRoute()

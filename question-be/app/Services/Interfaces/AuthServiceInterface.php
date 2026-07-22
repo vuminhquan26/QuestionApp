@@ -7,4 +7,7 @@ interface AuthServiceInterface
 {
     public function register(Request $request);
     public function login(Request $request);
+    public function logout();
+    public function refresh();
+    public function profile();
 }

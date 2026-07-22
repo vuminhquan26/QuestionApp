@@ -53,7 +53,7 @@
         <a-col v-for="subject in subjects" :key="subject.id" :span="6">
           <a-card hoverable>
             <template #cover>
-              <img src="@/assets/monhoc.png" width="100%" height="100%"   />
+              <img src="@/assets/monhoc.png" width="100%" height="100%" />
             </template>
             <a-card-meta class="card-meta" :title="subject.name">
               <template #description>
@@ -68,46 +68,46 @@
 </template>
 <script setup>
 import { ref, onMounted } from 'vue'
+import { message } from 'ant-design-vue'
 
+
+import banner from '@/assets/banner.png'
+import courseImg from '@/assets/laravel-featured.png'
+import campusImg from '@/assets/campus.png'
+import subjectImg from '@/assets/monhoc.png'
+
+// state
 const subjects = ref([])
-const fetchSubjects = async () => {
-  try {
-    const response = await fetch('http://127.0.0.1:8000/api/subject')
-    const result = await response.json()
-
-    subjects.value = result.data
-  } catch (error) {
-    console.error('Error fetch subjects:', error)
-  }
-}
-
 const courses = ref([])
-const fetchCourses = async () => {
-  try {
-    const response = await fetch('http://127.0.0.1:8000/api/course')
-    const result = await response.json()
-    courses.value = result.data
-  } catch (error) {
-    console.error('Error fetch courses:', error)
-  }
+const campus = ref([])
+const loading = ref(false)
+
+const fetchData = async () => {
+  loading.value = true
+
+  const [courseRes, subjectRes, campusRes] = await Promise.all([
+    getCourses(),
+    getSubjects(),
+    getCampuses()
+  ])
+
+  loading.value = false
+
+  if (courseRes?.data) courses.value = courseRes.data
+  else message.error('Lỗi load courses')
+
+  if (subjectRes?.data) subjects.value = subjectRes.data
+  else message.error('Lỗi load subjects')
+
+  if (campusRes?.data) campus.value = campusRes.data
+  else message.error('Lỗi load campus')
 }
 
-const campus = ref([])
-const fetchCampuses = async () => {
-  try {
-    const response = await fetch('http://127.0.0.1:8000/api/campus')
-    const result = await response.json()
-    campus.value = result.data
-  } catch (error) {
-    console.error('Error fetch campuses:', error)
-  }
-}
 onMounted(() => {
-  fetchSubjects()
-  fetchCourses()
-  fetchCampuses()
+  fetchData()
 })
 </script>
+
 <style scoped>
 .home {
   display: flex;
@@ -156,6 +156,7 @@ onMounted(() => {
   color: #fff;
   text-align: center;
 }
+
 .card-meta {
   font-size: 15px;
 }

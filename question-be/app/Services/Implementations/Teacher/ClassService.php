@@ -4,7 +4,7 @@ namespace App\Services\Implementations\Teacher;
 
 use App\Services\Interfaces\Teacher\ClassServiceInterface;
 use App\Models\Classes;
-
+use App\Models\User;
 class ClassService implements ClassServiceInterface
 {
     public function getList(array $filters)
@@ -48,5 +48,22 @@ class ClassService implements ClassServiceInterface
         $class->delete();
 
         return true;
+    }
+    public function getStudents($classId)
+    {
+        // lấy danh sách student trong lớp
+        return User::whereHas('classes', function ($query) use ($classId) {
+
+            // lọc theo class
+            $query->where('class_id', $classId);
+
+        })
+        ->whereHas('roles', function ($query) {
+
+            // chỉ lấy role Student
+            $query->where('name', 'Student');
+
+        })
+        ->paginate(20);
     }
 }

@@ -56,4 +56,14 @@ class ClassController extends Controller
             'message' => 'Deleted'
         ]);
     }
+    public function getStudents($id)
+    {
+        $res = $this->service->getStudents($id);
+
+        return response()->json([
+            'status' => $res['status'],
+            'data' => $res['data'],
+            'total' => $res['total'] ?? null
+        ]);
+    }
 }

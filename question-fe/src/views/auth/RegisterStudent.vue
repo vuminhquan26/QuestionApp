@@ -7,10 +7,7 @@
 
           <!-- HEADER -->
           <div class="header">
-            <img
-              class="avatar"
-              src="https://cdn-icons-png.flaticon.com/512/3135/3135755.png"
-            />
+            <img class="avatar" src="https://cdn-icons-png.flaticon.com/512/3135/3135755.png" />
             <h2>Student Register</h2>
             <p>Tạo tài khoản học viên</p>
           </div>
@@ -61,11 +58,11 @@
     </a-row>
   </div>
 </template>
-
 <script setup>
 import { ref } from 'vue'
 import { message } from 'ant-design-vue'
 import { useRouter } from 'vue-router'
+
 
 const router = useRouter()
 
@@ -84,19 +81,13 @@ const submitForm = async () => {
     role: 'Student'
   }
 
-  const res = await fetch('http://127.0.0.1:8000/api/register', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(payload)
-  })
+  const res = await register(payload)
 
-  const data = await res.json()
-
-  if (res.ok) {
+  if (res?.status) {
     message.success('Đăng ký thành công')
     router.push('/auth/login')
   } else {
-    message.error(data.message || 'Lỗi đăng ký')
+    message.error(res?.message || 'Lỗi đăng ký')
   }
 }
 
@@ -114,7 +105,7 @@ const goLogin = () => {
 .register-card {
   border-radius: 16px;
   padding: 10px;
-  box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
 }
 
 .header {

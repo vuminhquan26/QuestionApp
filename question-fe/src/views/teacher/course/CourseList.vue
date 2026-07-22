@@ -3,38 +3,33 @@
     <h2>Danh sách khóa học</h2>
 
     <!-- SEARCH -->
-    <a-input
-      v-model:value="search"
-      placeholder="Tìm kiếm khóa học..."
-      style="width: 300px; margin-bottom: 16px"
-      @pressEnter="fetchCourses"
-    />
+    <a-input v-model:value="search" placeholder="Tìm kiếm khóa học..." style="width: 300px; margin-bottom: 16px"
+      @pressEnter="fetchCourses" />
 
     <!-- TABLE -->
-    <a-table
-      :columns="columns"
-      :data-source="courses"
-      row-key="id"
-      :pagination="{ pageSize: 10 }"
-    />
+    <a-table :columns="columns" :data-source="courses" row-key="id" :pagination="{ pageSize: 10 }" />
   </div>
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue'
+import { message } from 'ant-design-vue'
+
+
 
 const courses = ref([])
 const search = ref('')
+const loading = ref(false)
 
 const columns = [
   {
     title: 'Mã khóa học',
-    dataIndex: 'course_code',
+    dataIndex: 'course_code'
   },
   {
     title: 'Tên khóa học',
     customRender: ({ record }) => {
-      return record.course_name.split('|')[1]?.split('/')[1] || ''
+      return record.course_name?.split('|')[1]?.split('/')[1] || ''
     }
   },
   {
@@ -44,7 +39,7 @@ const columns = [
   {
     title: 'Thời lượng',
     customRender: ({ record }) => {
-      return record.course_duration + ' ' + record.course_duration_unit
+      return `${record.course_duration} ${record.course_duration_unit}`
     }
   },
   {
@@ -53,12 +48,21 @@ const columns = [
   }
 ]
 
+// fetch
 const fetchCourses = async () => {
-  const res = await fetch(
-    `http://127.0.0.1:8000/api/teacher/course?search=${search.value}`
-  )
-  const data = await res.json()
-  courses.value = data.data
+  loading.value = true
+
+  const res = await getTeacherCourses({
+    search: search.value
+  })
+
+  loading.value = false
+
+  if (res?.data) {
+    courses.value = res.data
+  } else {
+    message.error('Không tải được danh sách khóa học')
+  }
 }
 
 onMounted(fetchCourses)

@@ -7,10 +7,7 @@
 
           <!-- HEADER -->
           <div class="header">
-            <img
-              class="avatar"
-              src="https://cdn-icons-png.flaticon.com/512/1995/1995574.png"
-            />
+            <img class="avatar" src="https://cdn-icons-png.flaticon.com/512/1995/1995574.png" />
             <h2>Teacher Register</h2>
             <p>Tạo tài khoản giảng viên</p>
           </div>
@@ -46,13 +43,7 @@
               <a-date-picker v-model:value="form.birth_date" style="width: 100%" />
             </a-form-item>
 
-            <a-button
-              type="primary"
-              html-type="submit"
-              block
-              size="large"
-              class="btn-teacher"
-            >
+            <a-button type="primary" html-type="submit" block size="large" class="btn-teacher">
               Đăng ký Teacher
             </a-button>
 
@@ -88,7 +79,11 @@ const form = ref({
   birth_date: null
 })
 
+const loading = ref(false)
+
 const submitForm = async () => {
+  loading.value = true
+
   const payload = {
     ...form.value,
     role: 'Teacher',
@@ -97,19 +92,26 @@ const submitForm = async () => {
       : null
   }
 
-  const res = await fetch('http://127.0.0.1:8000/api/register', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(payload)
-  })
+  const res = await register(payload)
 
-  const data = await res.json()
+  loading.value = false
 
-  if (res.ok) {
+  if (res?.status) {
     message.success('Đăng ký Teacher thành công')
+
+    // reset form
+    form.value = {
+      name: '',
+      email: '',
+      password: '',
+      phone: '',
+      gender: '',
+      birth_date: null
+    }
+
     router.push('/auth/login')
   } else {
-    message.error(data.message || 'Lỗi đăng ký')
+    message.error(res?.message || 'Lỗi đăng ký')
   }
 }
 
@@ -117,6 +119,7 @@ const goLogin = () => {
   router.push('/auth/login')
 }
 </script>
+
 
 <style scoped>
 .register-wrapper {
@@ -127,7 +130,7 @@ const goLogin = () => {
 .register-card {
   border-radius: 16px;
   padding: 10px;
-  box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
 }
 
 .header {

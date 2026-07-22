@@ -27,12 +27,8 @@
         <p class="label">📌 Danh sách đáp án</p>
 
         <div class="answers">
-          <div
-            v-for="ans in question.answer_data?.answer_contents || []"
-            :key="ans.answer_id"
-            class="answer-item"
-            :class="{ correct: isCorrect(ans.answer_id) }"
-          >
+          <div v-for="ans in question.answer_data?.answer_contents || []" :key="ans.answer_id" class="answer-item"
+            :class="{ correct: isCorrect(ans.answer_id) }">
             <span class="key">{{ ans.answer_id }}</span>
             <span class="value">{{ ans.answer_content }}</span>
 
@@ -54,7 +50,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
-import { questionService } from '@/services/question_service'
+
 
 const route = useRoute()
 

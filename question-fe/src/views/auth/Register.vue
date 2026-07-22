@@ -59,11 +59,29 @@ import { useRouter } from 'vue-router'
 
 const router = useRouter()
 
+const roles = [
+  {
+    key: 'student',
+    title: 'Student',
+    description: 'Học viên tham gia khóa học',
+    image: 'https://cdn-icons-png.flaticon.com/512/3135/3135755.png',
+    path: '/auth/register-student'
+  },
+  {
+    key: 'teacher',
+    title: 'Teacher',
+    description: 'Giảng viên tạo khóa học',
+    image: 'https://cdn-icons-png.flaticon.com/512/1995/1995574.png',
+    path: '/auth/register-teacher'
+  }
+]
+
+// điều hướng
 const go = (role) => {
-  if (role === 'student') {
-    router.push('/auth/register-student')
-  } else {
-    router.push('/auth/register-teacher')
+  const target = roles.find(r => r.key === role)
+
+  if (target) {
+    router.push(target.path)
   }
 }
 </script>
